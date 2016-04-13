@@ -10,8 +10,9 @@ public class Environment : BaseObject
 
     public ENVIRONMENT_TYPE myEType;
     public bool isBreakable = false;
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start ()
     {
         myType = OBJECT_TYPE.ENVIRONMENT;
         myEType = ENVIRONMENT_TYPE.DEFAULT;
@@ -22,4 +23,10 @@ public class Environment : BaseObject
     {
 	
 	}
+   
+    public override void OnClick(RaycastHit _clickedOn, bool isAgressive = false)
+    {
+        Debug.Log("OnClick Enviornment");
+    }
+    
 }

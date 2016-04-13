@@ -4,41 +4,55 @@ using System.Collections;
 public class Mineral : Resource
 {
     public int MineralCap = 500;
-    public float MiningRate = 0.5f;
-    public int NumMiners = 2;
+    private int MineralsLeft;
+    private int GatherAmount = 7;
 
-    private GameObject ClosetBase;
-    private GameObject[] baseList;
-    [Header("DebugInfo")]
     public bool ShowDebugLines = true;
     // Use this for initialization
     void Start()
     {
-        baseList = GameObject.FindGameObjectsWithTag("Base");
-        float shortestDistance = float.MaxValue;
-        foreach (GameObject obj in baseList)
-        {
-            float distance = (transform.position - obj.transform.position).magnitude;
-            if (distance < shortestDistance)
-                ClosetBase = obj;
-        }
         myType = OBJECT_TYPE.RESOURCE;
         myRType = RESOURCE_TYPE.MINERAL;
+        MineralsLeft = MineralCap;
+        CurrentMiners = new MinerStruct[maxMiners];
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ShowDebugLines)
+        for (int x = 0; x < maxMiners; x++)
         {
-            foreach (GameObject obj in baseList)
+            if (CurrentMiners[x].Miner != null)
             {
-                if (obj == ClosetBase)
-                    Debug.DrawLine(transform.position, obj.transform.position, Color.red);
-                else
-                    Debug.DrawLine(transform.position, obj.transform.position, Color.black);
+                float d = (transform.position - CurrentMiners[x].Miner.transform.position).magnitude;
+                if (d > 1.0f)
+                    continue;
+                CurrentMiners[x].time -= Time.deltaTime;
+                if (CurrentMiners[x].time <= 0.0f)
+                {
+                    Worker scrub =  CurrentMiners[x].Miner.GetComponent<Worker>();
+                    scrub.FindClosetBase();
+                    scrub.SetCarryAmount(GatherAmount);
+                    GatherMinerals();
+                    CurrentMiners[x].Miner = null;
+                    CurrentMiners[x].time = MiningRate;
+                    NumMiners--;
+                }
             }
         }
-
     }
+
+    public void GatherMinerals()
+    {
+        MineralsLeft -= GatherAmount;
+        NumMiners = NumMiners - 1 < 0 ? 0 : NumMiners--;
+    }
+
+
+
+
+
+
+
+
 }

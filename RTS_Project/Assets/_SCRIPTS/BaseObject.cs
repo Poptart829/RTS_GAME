@@ -8,7 +8,10 @@ public class BaseObject : MonoBehaviour
         BASE_TYPE, STRUCUTRE, RESOURCE, UNIT, ENVIRONMENT
     };
     public OBJECT_TYPE myType;
-        
+
+    protected bool isMoveable = false;
+    public bool GetMoveable() { return isMoveable; }
+
 	// Use this for initialization
 	void Start ()
     {
@@ -21,7 +24,7 @@ public class BaseObject : MonoBehaviour
 	
 	}
 
-    public virtual void OnClick(GameObject _objClickedOn, bool _isAgressive = false)
+    public virtual void OnClick(RaycastHit _objClickedOn, bool _isAgressive = false)
     {
         Debug.Log("Didn't Override");
     }

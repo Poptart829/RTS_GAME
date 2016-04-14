@@ -4,8 +4,9 @@ using System.Collections;
 public class Worker : Unit
 {
     private bool goingHome = false;
-    private bool isMoving = false;
     public float moveSpeed = 17.0f;
+    public Transform MineralAttachSpot;
+    private GameObject attachedPrefab;
     private GameObject targetBase;
     public GameObject GetTargetBase() { return targetBase; }
     private GameObject targetResource;
@@ -28,15 +29,15 @@ public class Worker : Unit
         isMoveable = true;
         FindClosetBase();
         FindClosestMineralPatch();
+        MineralAttachSpot = MineralAttachSpot.GetComponent<Transform>();
+        SetMoveTo(transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isMoving)
-        {
-            Move(GetMoveToPos());
-        }
+        //move to where ever i need to go
+        Move(GetMoveToPos());
     }
 
     public override void Move(Vector3 _moveTo, bool _GoingHome = false)
@@ -44,18 +45,18 @@ public class Worker : Unit
         if (_GoingHome)
             goingHome = _GoingHome;
         transform.LookAt(_moveTo);
-        isMoving = true;
         SetMoveTo(_moveTo);
         transform.position = Vector3.MoveTowards(transform.position, _moveTo, moveSpeed * Time.deltaTime);
         float d = (GetMoveToPos() - transform.position).magnitude;
         if (d < 1.0f)
         {
-            isMoving = false;
             if (goingHome)
             {
                 goingHome = false;
                 targetBase.GetComponent<HomeBase>().AddMinerals(CarryAmount);
+                DetachPrefab();
                 targetResource.GetComponent<Resource>().AddMiner(gameObject);
+
                 Move(targetResource.transform.position);
             }
         }
@@ -90,19 +91,14 @@ public class Worker : Unit
 
     public void FindClosestMineralPatch()
     {
-        //use base to get mineral patches
-        //find closet mineral patch with less than max workers on it
-        // go to that one and start mining XD
-        HomeBase b = targetBase.GetComponent<HomeBase>();
-        targetResource = b.GetAPatch();
-        
+        targetResource = targetBase.GetComponent<HomeBase>().GetAPatch();
     }
+
     //fills out the targetbase for the worker
     public void FindClosetBase()
     {
         if (targetBase == null)
         {
-            Debug.Log("findbase");
             GameObject[] HomeBase = GameObject.FindGameObjectsWithTag("Base");
             float distance = float.MaxValue;
             foreach (GameObject b in HomeBase)
@@ -113,9 +109,24 @@ public class Worker : Unit
         }
     }
 
-    public void ReturnToResource()
+    public void AttachPrefab(GameObject _prefab)
     {
+        if (attachedPrefab == null)
+        {
+            GameObject g = Instantiate(_prefab, MineralAttachSpot.position, Quaternion.identity) as GameObject;
+            attachedPrefab = g;
+            attachedPrefab.transform.SetParent(transform);
+        }
+    }
 
+    public void DetachPrefab()
+    {
+        if (attachedPrefab != null)
+        {
+            attachedPrefab.transform.SetParent(null);
+            Destroy(attachedPrefab);
+        }
     }
 
 }
+

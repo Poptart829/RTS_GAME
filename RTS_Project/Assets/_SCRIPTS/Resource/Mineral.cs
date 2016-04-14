@@ -6,7 +6,7 @@ public class Mineral : Resource
     public int MineralCap = 500;
     private int MineralsLeft;
     private int GatherAmount = 7;
-
+    public GameObject MineralPrefab;
     public bool ShowDebugLines = true;
     // Use this for initialization
     void Start()
@@ -37,6 +37,8 @@ public class Mineral : Resource
                     scrub.SetCarryAmount(GatherAmount);
                     //mineral class update to its remaining minerals
                     GatherMinerals();
+                    //attach prefab to worker
+                    scrub.AttachPrefab(MineralPrefab);
                     //start moving the working to ho home
                     scrub.Move(scrub.GetTargetBase().transform.position,true);
                     //reset the current miner at 'x' to allow more miners at this patch
@@ -58,6 +60,7 @@ public class Mineral : Resource
         NumMiners--;
         if (NumMiners < 0)
             NumMiners = 0;
+        
     }
 
 

@@ -8,6 +8,7 @@ public class Unit : BaseObject
         DEFAULT, WORKER, ATT_UNIT1, ATT_UNIT2
     };
     public Unit.UNIT_TYPE myUnitType;
+    //protected bool isMoving = false;
 
     private Vector3 MoveToPos;
     public void SetMoveTo(Vector3 _pos)

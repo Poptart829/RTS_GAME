@@ -8,11 +8,16 @@ public class BaseObject : MonoBehaviour
         BASE_TYPE, STRUCUTRE, RESOURCE, UNIT, ENVIRONMENT
     };
     public OBJECT_TYPE myType;
-
+    protected Rigidbody myRigidBody;
+    public Rigidbody GetMyRBody() { return myRigidBody; }
     protected bool isMoveable = false;
     public bool GetMoveable() { return isMoveable; }
     protected bool isHighlightable = true;
     public bool GetHighlightable() { return isHighlightable; }
+    void Awake()
+    {
+        myRigidBody = gameObject.GetComponent<Rigidbody>();
+    }
 	// Use this for initialization
 	void Start ()
     {

@@ -18,7 +18,7 @@ public class HomeBase : Structure
         ResourcePatches = new List<GameObject>();
         ClosetestResorucePatches();
     }
-    
+
     // Use this for initialization
     void Start()
     {
@@ -58,5 +58,18 @@ public class HomeBase : Structure
     public void AddMinerals(int _add)
     {
         MineralCount += _add;
+    }
+
+    public void OnCollisionEnter(Collision _col)
+    {
+        Worker w = _col.gameObject.GetComponent<Worker>();
+        if (w)
+        {
+            w.transform.LookAt(null);
+            w.GetMyRBody().velocity = Vector3.zero;
+            w.DetachPrefab();
+            AddMinerals(w.GetCarryAmount());
+            w.Move(w.GetTargetResource().transform.position);
+        }
     }
 }

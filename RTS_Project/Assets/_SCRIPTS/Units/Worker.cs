@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Worker : Unit
 {
-    private bool goingHome = false;
     public float moveSpeed = 17.0f;
     public Transform MineralAttachSpot;
     private GameObject attachedPrefab;
@@ -20,6 +19,7 @@ public class Worker : Unit
     }
     public GameObject GetTargetResource() { return targetResource; }
     private int CarryAmount = 0;
+    public int GetCarryAmount() { return CarryAmount; }
     public void SetCarryAmount(int _CA) { CarryAmount = _CA; }
     // Use this for initialization
     void Start()
@@ -34,32 +34,26 @@ public class Worker : Unit
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         //move to where ever i need to go
         Move(GetMoveToPos());
     }
 
-    public override void Move(Vector3 _moveTo, bool _GoingHome = false)
+    public override void Move(Vector3 _moveTo)
     {
-        if (_GoingHome)
-            goingHome = _GoingHome;
-        transform.LookAt(_moveTo);
         SetMoveTo(_moveTo);
-        transform.position = Vector3.MoveTowards(transform.position, _moveTo, moveSpeed * Time.deltaTime);
+        Vector3 direction = GetMoveToPos() - transform.position;
+        direction = direction.normalized * moveSpeed;
+        myRigidBody.velocity = direction;
         float d = (GetMoveToPos() - transform.position).magnitude;
-        if (d < 1.0f)
+        if (d < 1.6f)
         {
-            if (goingHome)
-            {
-                goingHome = false;
-                targetBase.GetComponent<HomeBase>().AddMinerals(CarryAmount);
-                DetachPrefab();
-                targetResource.GetComponent<Resource>().AddMiner(gameObject);
-
-                Move(targetResource.transform.position);
-            }
+            myRigidBody.velocity = Vector3.zero;
         }
+        else
+            transform.LookAt(_moveTo);
+
     }
 
     public override void MakeDecision(RaycastHit _hit)
@@ -74,7 +68,7 @@ public class Worker : Unit
             case OBJECT_TYPE.RESOURCE:
                 //currently gathering minerals
                 Resource r = _hit.transform.gameObject.GetComponent<Resource>();
-                r.AddMiner(gameObject);
+                //r.AddMiner(gameObject);
                 targetResource = r.gameObject;
                 Move(targetResource.transform.position);
                 break;
@@ -125,6 +119,7 @@ public class Worker : Unit
         {
             attachedPrefab.transform.SetParent(null);
             Destroy(attachedPrefab);
+            SetCarryAmount(0);
         }
     }
 

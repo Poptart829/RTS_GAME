@@ -24,9 +24,6 @@ public class Mineral : Resource
         {
             if (CurrentMiners[x].Miner != null)
             {
-                float d = (transform.position - CurrentMiners[x].Miner.transform.position).magnitude;
-                if (d > 1.0f)
-                    continue;
                 CurrentMiners[x].time -= Time.deltaTime;
                 if (CurrentMiners[x].time <= 0.0f)
                 {
@@ -40,7 +37,7 @@ public class Mineral : Resource
                     //attach prefab to worker
                     scrub.AttachPrefab(MineralPrefab);
                     //start moving the working to ho home
-                    scrub.Move(scrub.GetTargetBase().transform.position,true);
+                    scrub.Move(scrub.GetTargetBase().transform.position);
                     //reset the current miner at 'x' to allow more miners at this patch
                     ResetMiner(x);
                 }

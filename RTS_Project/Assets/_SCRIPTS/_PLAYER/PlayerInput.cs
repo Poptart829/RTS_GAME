@@ -34,6 +34,8 @@ public class PlayerInput : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * RayDistance, Color.red);
         if (Physics.Raycast(ray, out hit))
         {
+            if (hit.point.y < 0.0f)
+                hit.point = new Vector3(hit.point.x, 0.0f, hit.point.z);
             Renderer r;
             BaseObject obj = hit.transform.gameObject.GetComponent<BaseObject>();
             if (LastObjClicked != null)

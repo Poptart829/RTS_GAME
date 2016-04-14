@@ -41,7 +41,7 @@ public class Unit : BaseObject
 	    
 	}
 
-    public virtual void Move(Vector3 _moveTo, bool _goingHome = false)
+    public virtual void Move(Vector3 _moveTo)
     {
         
     }

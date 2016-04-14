@@ -19,16 +19,28 @@ public class Resource : BaseObject
     public int maxMiners = 2;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         myRType = RESOURCE_TYPE.DEFAULT;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-	
-	}
+
+    }
+
+    public void OnCollisionEnter(Collision _col)
+    {
+        Worker w = _col.gameObject.GetComponent<Worker>();
+        if (w)
+        {
+            w.transform.LookAt(null);
+            w.GetMyRBody().velocity = Vector3.zero;
+            Debug.Log(w.gameObject.name + " hit " + gameObject.name);
+            AddMiner(w.gameObject);
+        }
+    }
 
     public void AddMiner(GameObject _obj)
     {
@@ -37,6 +49,7 @@ public class Resource : BaseObject
         {
             if (CurrentMiners[x].Miner == null)
             {
+                Debug.Log("adding " + _obj.name);
                 CurrentMiners[x].Miner = _obj;
                 CurrentMiners[x].time = MiningRate;
                 NumMiners++;
@@ -46,14 +59,14 @@ public class Resource : BaseObject
         }
         if (found == false)
         {
-            Worker w =_obj.GetComponent<Worker>();
-            if(w)
+            Worker w = _obj.GetComponent<Worker>();
+            if (w)
             {
                 w.FindClosestMineralPatch();
                 w.GetTargetResource().GetComponent<Resource>().AddMiner(w.gameObject);
                 w.Move(w.GetTargetResource().transform.position);
             }
-            
+
         }
     }
 

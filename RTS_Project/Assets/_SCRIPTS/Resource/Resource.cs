@@ -46,7 +46,14 @@ public class Resource : BaseObject
         }
         if (found == false)
         {
-            _obj.GetComponent<Worker>().FindClosestMineralPatch();
+            Worker w =_obj.GetComponent<Worker>();
+            if(w)
+            {
+                w.FindClosestMineralPatch();
+                w.GetTargetResource().GetComponent<Resource>().AddMiner(w.gameObject);
+                w.Move(w.GetTargetResource().transform.position);
+            }
+            
         }
     }
 

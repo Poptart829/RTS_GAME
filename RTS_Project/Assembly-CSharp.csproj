@@ -60,6 +60,8 @@
      <Compile Include="Assets\_SCRIPTS\Units\Worker.cs" />
      <Compile Include="Assets\_SCRIPTS\_PLAYER\PlayerInput.cs" />
      <Compile Include="Assets\_SCRIPTS\_PLAYER\PlayerUI.cs" />
+     <None Include="Assets\_SHADERS\ClickMe.shader" />
+     <None Include="Assets\_SHADERS\OnClickHighlight.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

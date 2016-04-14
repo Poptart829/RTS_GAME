@@ -16,6 +16,7 @@ public class Environment : BaseObject
     {
         myType = OBJECT_TYPE.ENVIRONMENT;
         myEType = ENVIRONMENT_TYPE.DEFAULT;
+        isHighlightable = false;
 	}
 	
 	// Update is called once per frame

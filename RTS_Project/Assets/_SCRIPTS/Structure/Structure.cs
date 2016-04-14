@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic; 
 
 public class Structure : BaseObject
 {
@@ -10,8 +9,7 @@ public class Structure : BaseObject
     };
 
     public STRUCT_TYPE myStructType;
-    public float SphereRadius = 30.0f;
-    protected List<GameObject> ResourcePatches;
+    
     // Use this for initialization
     void Start ()
     {
@@ -25,11 +23,7 @@ public class Structure : BaseObject
 	
 	}
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, SphereRadius);
-    }
+
 
     virtual public void ClosetestResorucePatches()
     {

@@ -10,6 +10,7 @@ public class Map : Environment
     {
         myType = OBJECT_TYPE.ENVIRONMENT;
         myEType = ENVIRONMENT_TYPE.LEVEL;
+        isHighlightable = false;
     }
 
     // Update is called once per frame

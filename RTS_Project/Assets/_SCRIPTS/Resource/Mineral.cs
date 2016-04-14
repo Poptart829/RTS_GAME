@@ -31,21 +31,33 @@ public class Mineral : Resource
                 if (CurrentMiners[x].time <= 0.0f)
                 {
                     Worker scrub =  CurrentMiners[x].Miner.GetComponent<Worker>();
+                    //find the closest base to return the minerals too
                     scrub.FindClosetBase();
+                    //set the amount im going to carry
                     scrub.SetCarryAmount(GatherAmount);
+                    //mineral class update to its remaining minerals
                     GatherMinerals();
-                    CurrentMiners[x].Miner = null;
-                    CurrentMiners[x].time = MiningRate;
-                    NumMiners--;
+                    //start moving the working to ho home
+                    scrub.Move(scrub.GetTargetBase().transform.position,true);
+                    //reset the current miner at 'x' to allow more miners at this patch
+                    ResetMiner(x);
                 }
             }
         }
     }
 
+    private void ResetMiner(int _who)
+    {
+        CurrentMiners[_who].Miner = null;
+        CurrentMiners[_who].time = MiningRate;
+    }
+
     public void GatherMinerals()
     {
         MineralsLeft -= GatherAmount;
-        NumMiners = NumMiners - 1 < 0 ? 0 : NumMiners--;
+        NumMiners--;
+        if (NumMiners < 0)
+            NumMiners = 0;
     }
 
 

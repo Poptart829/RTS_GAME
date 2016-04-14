@@ -3,8 +3,10 @@ using System.Collections;
 
 public class PlayerInput : MonoBehaviour
 {
+    public Shader OnClickShader;
     private bool IsAgressive = false;
-    GameObject OBJ_Clicked;
+    private GameObject OBJ_Clicked;
+    private GameObject LastObjClicked;
     private int RayDistance = 50000000;
     // Use this for initialization
     void Start()
@@ -32,7 +34,19 @@ public class PlayerInput : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * RayDistance, Color.red);
         if (Physics.Raycast(ray, out hit))
         {
+            Renderer r;
             BaseObject obj = hit.transform.gameObject.GetComponent<BaseObject>();
+            if (LastObjClicked != null)
+            {
+                r = LastObjClicked.GetComponentInChildren<Renderer>();
+                r.material.shader = Shader.Find("Standard");
+            }
+            if (obj.GetHighlightable())
+            {
+                LastObjClicked = obj.gameObject;
+                r = LastObjClicked.GetComponentInChildren<Renderer>();
+                r.material.shader = OnClickShader;
+            }
             if (obj.GetMoveable())
             {
                 OBJ_Clicked = obj.gameObject;
@@ -77,7 +91,7 @@ public class PlayerInput : MonoBehaviour
                 switch (unitClicked.myUnitType)
                 {
                     case Unit.UNIT_TYPE.WORKER:
-                        OBJ_Clicked.GetComponent<Unit>().MakeDecision(hit); 
+                        OBJ_Clicked.GetComponent<Unit>().MakeDecision(hit);
                         break;
                     case Unit.UNIT_TYPE.ATT_UNIT1:
                         break;

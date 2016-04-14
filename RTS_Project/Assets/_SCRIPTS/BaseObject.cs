@@ -11,7 +11,8 @@ public class BaseObject : MonoBehaviour
 
     protected bool isMoveable = false;
     public bool GetMoveable() { return isMoveable; }
-
+    protected bool isHighlightable = true;
+    public bool GetHighlightable() { return isHighlightable; }
 	// Use this for initialization
 	void Start ()
     {

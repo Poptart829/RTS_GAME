@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 public class HomeBase : Structure
 {
-    private Rect resourceDisplay;
+    //how many minerals this current base has mined
     private int MineralCount = 0;
+    //the patches which are close to the base
     protected List<GameObject> ResourcePatches;
+    //the sphere of influence around the base which are this bases ResourcePatches
     public float SphereRadius = 30.0f;
+    //the PlayerHUD
     public GameObject GetAPatch()
     {
         int r = Random.Range(0, ResourcePatches.Count);
@@ -18,19 +21,28 @@ public class HomeBase : Structure
         ResourcePatches = new List<GameObject>();
         ClosetestResorucePatches();
     }
-
+    public GameObject WorkerPrefab;
     // Use this for initialization
     void Start()
     {
         myType = OBJECT_TYPE.STRUCUTRE;
         myStructType = STRUCT_TYPE.HOMEBASE;
-        resourceDisplay = new Rect(Screen.width - 100, 10, 40, 40);
+        RalleyPoint.position = RalleyPoint.position - transform.position;
+        if (RalleyPoint.position.y < 0.0f)
+            RalleyPoint.position = new Vector3(RalleyPoint.position.x,
+                                               0.0f,
+                                               RalleyPoint.position.z);
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+    public void ProduceWorker()
+    {
+        GameObject g = Instantiate(WorkerPrefab, SpawnPoint.position, Quaternion.identity) as GameObject;
+        g.GetComponent<Worker>().OnSpawn(RalleyPoint.position);
     }
 
     public override void ClosetestResorucePatches()
@@ -49,26 +61,22 @@ public class HomeBase : Structure
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, SphereRadius);
     }
-    public void OnGUI()
-    {
-        string display = "Minerals " + MineralCount.ToString();
-        GUI.Label(resourceDisplay, display);
-    }
 
     public void AddMinerals(int _add)
     {
         MineralCount += _add;
+        PlayerHUD.UpdateMineralCountDisplay(_add);
     }
 
     public void OnCollisionEnter(Collision _col)
     {
         Worker w = _col.gameObject.GetComponent<Worker>();
-        if (w)
+        if (w && w.GetCarryAmount() > 0)
         {
             w.transform.LookAt(null);
             w.GetMyRBody().velocity = Vector3.zero;
-            w.DetachPrefab();
             AddMinerals(w.GetCarryAmount());
+            w.DetachPrefab();
             w.Move(w.GetTargetResource().transform.position);
         }
     }

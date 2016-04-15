@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Worker : Unit
 {
-    public float moveSpeed = 17.0f;
     public Transform MineralAttachSpot;
     private GameObject attachedPrefab;
     private GameObject targetBase;
@@ -21,8 +20,14 @@ public class Worker : Unit
     private int CarryAmount = 0;
     public int GetCarryAmount() { return CarryAmount; }
     public void SetCarryAmount(int _CA) { CarryAmount = _CA; }
+
+
     // Use this for initialization
     void Start()
+    {
+    }
+
+    public override void OnSpawn(Vector3 _HeadingTo)
     {
         myType = OBJECT_TYPE.UNIT;
         myUnitType = UNIT_TYPE.WORKER;
@@ -30,7 +35,7 @@ public class Worker : Unit
         FindClosetBase();
         FindClosestMineralPatch();
         MineralAttachSpot = MineralAttachSpot.GetComponent<Transform>();
-        SetMoveTo(transform.position);
+        SetMoveTo(_HeadingTo);
     }
 
     // Update is called once per frame
@@ -38,22 +43,6 @@ public class Worker : Unit
     {
         //move to where ever i need to go
         Move(GetMoveToPos());
-    }
-
-    public override void Move(Vector3 _moveTo)
-    {
-        SetMoveTo(_moveTo);
-        Vector3 direction = GetMoveToPos() - transform.position;
-        direction = direction.normalized * moveSpeed;
-        myRigidBody.velocity = direction;
-        float d = (GetMoveToPos() - transform.position).magnitude;
-        if (d < 1.6f)
-        {
-            myRigidBody.velocity = Vector3.zero;
-        }
-        else
-            transform.LookAt(_moveTo);
-
     }
 
     public override void MakeDecision(RaycastHit _hit)

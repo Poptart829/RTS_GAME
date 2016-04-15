@@ -7,7 +7,13 @@ public class PlayerInput : MonoBehaviour
     private bool IsAgressive = false;
     private GameObject OBJ_Clicked;
     private GameObject LastObjClicked;
-    private int RayDistance = 50000000;
+    public GameObject GetLastClicked() { return LastObjClicked; }
+    public enum KEYBOARD_STATE
+    {
+        NORMAL, ATTACK, PATROL
+    };
+
+    public GameObject GetCurrentClickedObject() { return OBJ_Clicked; }
     // Use this for initialization
     void Start()
     {
@@ -17,6 +23,8 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction*50000000, Color.black);
         if (Input.GetButtonDown("Left Click"))
         {
             OnLeftClick();
@@ -31,13 +39,14 @@ public class PlayerInput : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        Debug.DrawRay(ray.origin, ray.direction * RayDistance, Color.red);
         if (Physics.Raycast(ray, out hit))
         {
             if (hit.point.y < 0.0f)
                 hit.point = new Vector3(hit.point.x, 0.0f, hit.point.z);
             Renderer r;
             BaseObject obj = hit.transform.gameObject.GetComponent<BaseObject>();
+            if (obj != null)
+                obj.UpdateHUDOnClick();
             if (LastObjClicked != null)
             {
                 r = LastObjClicked.GetComponentInChildren<Renderer>();
@@ -84,7 +93,6 @@ public class PlayerInput : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        Debug.DrawRay(ray.origin, ray.direction * RayDistance, Color.blue);
         if (Physics.Raycast(ray, out hit))
         {
             if (OBJ_Clicked)

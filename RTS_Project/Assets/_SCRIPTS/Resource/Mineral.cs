@@ -5,7 +5,6 @@ public class Mineral : Resource
 {
     public int MineralCap = 500;
     private int MineralsLeft;
-    private int GatherAmount = 7;
     public GameObject MineralPrefab;
     public bool ShowDebugLines = true;
     // Use this for initialization
@@ -15,6 +14,7 @@ public class Mineral : Resource
         myRType = RESOURCE_TYPE.MINERAL;
         MineralsLeft = MineralCap;
         CurrentMiners = new MinerStruct[maxMiners];
+        GatherAmount = 7;
     }
 
     // Update is called once per frame

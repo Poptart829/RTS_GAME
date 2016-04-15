@@ -17,6 +17,7 @@ public class Resource : BaseObject
     public RESOURCE_TYPE myRType;
     public int NumMiners = 0;
     public int maxMiners = 2;
+    protected int GatherAmount = 7;
 
     // Use this for initialization
     void Start()
@@ -37,7 +38,7 @@ public class Resource : BaseObject
         {
             w.transform.LookAt(null);
             w.GetMyRBody().velocity = Vector3.zero;
-            Debug.Log(w.gameObject.name + " hit " + gameObject.name);
+            w.SetCarryAmount(GatherAmount);
             AddMiner(w.gameObject);
         }
     }
@@ -49,7 +50,6 @@ public class Resource : BaseObject
         {
             if (CurrentMiners[x].Miner == null)
             {
-                Debug.Log("adding " + _obj.name);
                 CurrentMiners[x].Miner = _obj;
                 CurrentMiners[x].time = MiningRate;
                 NumMiners++;

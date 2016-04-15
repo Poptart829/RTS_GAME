@@ -9,7 +9,7 @@ public class Unit : BaseObject
     };
     public Unit.UNIT_TYPE myUnitType;
     //protected bool isMoving = false;
-
+    public float moveSpeed = 17.0f;
     private Vector3 MoveToPos;
     public void SetMoveTo(Vector3 _pos)
     {
@@ -19,7 +19,6 @@ public class Unit : BaseObject
     {
         return MoveToPos;
     }
-
     public enum BEHAVIOR_TYPE
     {
         DEFAULT, MINING, ATTACKING, MOVING
@@ -27,6 +26,7 @@ public class Unit : BaseObject
     private BEHAVIOR_TYPE myBehavior;
     public void SetBehavior(BEHAVIOR_TYPE _BT) { myBehavior = _BT; }
     public BEHAVIOR_TYPE GetCurrentBehavior() { return myBehavior; }
+
     
 	// Use this for initialization
 	void Start ()
@@ -43,10 +43,25 @@ public class Unit : BaseObject
 
     public virtual void Move(Vector3 _moveTo)
     {
-        
+        SetMoveTo(_moveTo);
+        Vector3 direction = GetMoveToPos() - transform.position;
+        direction = direction.normalized * moveSpeed;
+        myRigidBody.velocity = direction;
+        float d = (GetMoveToPos() - transform.position).magnitude;
+        if (d < 1.6f)
+        {
+            myRigidBody.velocity = Vector3.zero;
+        }
+        else
+            transform.LookAt(_moveTo);
     }
 
     public virtual void MakeDecision(RaycastHit _hit)
+    {
+
+    }
+
+    public virtual void OnSpawn(Vector3 _HeadingTo )
     {
 
     }

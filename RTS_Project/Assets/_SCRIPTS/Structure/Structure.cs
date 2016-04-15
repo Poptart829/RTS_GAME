@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Structure : BaseObject
 {
+    public Transform RalleyPoint;
+    public Transform SpawnPoint;
     public enum STRUCT_TYPE
     {
         DEFAULT, MAP, HOMEBASE, RAX, FACTORY, STARPORT
@@ -15,6 +17,7 @@ public class Structure : BaseObject
     {
         myType = OBJECT_TYPE.STRUCUTRE;
         myStructType = STRUCT_TYPE.DEFAULT;
+        RalleyPoint.position = Vector3.zero;
 	}
 	
 	// Update is called once per frame

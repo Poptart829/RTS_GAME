@@ -15,7 +15,7 @@ public class BaseObject : MonoBehaviour
     public bool GetMoveable() { return isMoveable; }
     protected bool isHighlightable = true;
     public bool GetHighlightable() { return isHighlightable; }
-
+    public Sprite UnitIcon;
     public Sprite[] IconImages;
     public PlayerUI PlayerHUD;
     void Awake()
@@ -28,6 +28,7 @@ public class BaseObject : MonoBehaviour
     {
         myType = OBJECT_TYPE.BASE_TYPE;
         PlayerHUD = PlayerHUD.GetComponent<PlayerUI>();
+        IconImages = new Sprite[PlayerHUD.HUDButtons.Length];
     }
 
     // Update is called once per frame
@@ -37,19 +38,13 @@ public class BaseObject : MonoBehaviour
     }
     public void UpdateHUDOnClick()
     {
-        if (IconImages.Length > 0)
-            for (int x = 0; x < IconImages.Length; x++)
-            {
-                if (IconImages[x] != null)
-                {
-                    PlayerHUD.Icons[x].sprite = IconImages[x];
-                }
-            }
-        else
-        {
-            if (PlayerHUD != null)
-                PlayerHUD.ResetIcons();
-        }
+        //set the huds icon to the player icon for selected unit
+        if (PlayerHUD == null)
+            return;
+        PlayerHUD.UnitPicture.sprite = UnitIcon;
+        PlayerHUD.SetButtons(false);
+        for(int x = 0; x< IconImages.Length; x++)
+            PlayerHUD.SetButtons(x, IconImages[x]);
     }
 
     public virtual void OnClick(RaycastHit _objClickedOn, bool _isAgressive = false)

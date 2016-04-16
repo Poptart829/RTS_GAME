@@ -9,6 +9,7 @@ public class PlayerUI : MonoBehaviour
     //total number of minerals mined by the player
     private int TotalMinerals = 0;
     // Use this for initialization
+    public Image UnitPicture;
     public Image[] Icons;
     public Button[] HUDButtons;
     public Sprite EmptyIcon;
@@ -32,6 +33,17 @@ public class PlayerUI : MonoBehaviour
     {
         foreach (Image i in Icons)
             i.sprite = EmptyIcon;
+    }
+
+    public void SetButtons(bool _b)
+    {
+        foreach (Button b in HUDButtons)
+            b.gameObject.SetActive(_b);
+    }
+    public void SetButtons(int _who, Sprite _img)
+    {
+        HUDButtons[_who].gameObject.SetActive(true);
+        Icons[_who].sprite = _img;
     }
     // Update is called once per frame
     void Update()
@@ -64,7 +76,10 @@ public class PlayerUI : MonoBehaviour
             switch (s.myStructType)
             {
                 case Structure.STRUCT_TYPE.HOMEBASE:
-                    myProduceUnit = clickedOn.GetComponent<HomeBase>().ProduceWorker;
+                    HomeBase hb = clickedOn.GetComponent<HomeBase>();
+                    //myProduceUnit = hb.ProduceWorker;
+                    if (hb.GetIsBuilding() == false)
+                        hb.SetIsBuilding(true, hb.GetWorkerBuildTime());
                     break;
                 case Structure.STRUCT_TYPE.RAX:
                     break;
@@ -75,7 +90,7 @@ public class PlayerUI : MonoBehaviour
                 default:
                     break;
             }
-            myProduceUnit();
+            // myProduceUnit();
         }
     }
 }

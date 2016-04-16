@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class HomeBase : Structure
@@ -22,6 +23,9 @@ public class HomeBase : Structure
         ClosetestResorucePatches();
     }
     public GameObject WorkerPrefab;
+    private float WorkerBuildTime = 1.0f;
+    private float CurrentBuildTime = 0.0f;
+    public float GetWorkerBuildTime() { return WorkerBuildTime; }
     // Use this for initialization
     void Start()
     {
@@ -32,12 +36,27 @@ public class HomeBase : Structure
             RalleyPoint.position = new Vector3(RalleyPoint.position.x,
                                                0.0f,
                                                RalleyPoint.position.z);
+        //ProgressBar = new Image[2];
+        ProgressBar[0] = ProgressBar[0].GetComponent<Image>();
+        ProgressBar[1] = ProgressBar[1].GetComponent<Image>();
+        DisableProgessBar();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if(isBuilding)
+        {
+            CurrentBuildTime += Time.deltaTime;
+            ProgressBar[1].fillAmount = CurrentBuildTime / BuildTime;
+            if(CurrentBuildTime >= BuildTime)
+            {
+                CurrentBuildTime = 0.0f;
+                isBuilding = false;
+                ProduceWorker();
+                DisableProgessBar();
+            }
+        }
     }
     public void ProduceWorker()
     {
@@ -80,4 +99,4 @@ public class HomeBase : Structure
             w.Move(w.GetTargetResource().transform.position);
         }
     }
-}
+ }

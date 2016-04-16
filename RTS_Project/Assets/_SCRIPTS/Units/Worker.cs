@@ -36,6 +36,8 @@ public class Worker : Unit
         FindClosestMineralPatch();
         MineralAttachSpot = MineralAttachSpot.GetComponent<Transform>();
         SetMoveTo(_HeadingTo);
+        if (PlayerHUD == null)
+            PlayerHUD = GameObject.Find("PlayerUI").GetComponent<PlayerUI>();
     }
 
     // Update is called once per frame

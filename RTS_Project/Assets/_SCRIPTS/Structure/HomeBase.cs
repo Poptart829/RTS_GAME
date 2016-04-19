@@ -11,37 +11,41 @@ public class HomeBase : Structure
     protected List<GameObject> ResourcePatches;
     //the sphere of influence around the base which are this bases ResourcePatches
     public float SphereRadius = 30.0f;
-    //the PlayerHUD
+
     public GameObject GetAPatch()
     {
         int r = Random.Range(0, ResourcePatches.Count);
         return ResourcePatches[r];
     }
+
     void Awake()
     {
         ResourcePatches = new List<GameObject>();
         ClosetestResorucePatches();
+        Vector3 pos = new Vector3(transform.position.x,
+                                  0.0f,
+                                  transform.position.z * 4);
+        RalleyGameObject = Instantiate(RalleyGameObject,pos,Quaternion.identity) as GameObject;
     }
+    
     public GameObject WorkerPrefab;
     private float WorkerBuildTime = 1.0f;
     private float CurrentBuildTime = 0.0f;
     public float GetWorkerBuildTime() { return WorkerBuildTime; }
+    
     // Use this for initialization
     void Start()
     {
         myType = OBJECT_TYPE.STRUCUTRE;
         myStructType = STRUCT_TYPE.HOMEBASE;
-        RalleyPoint.position = RalleyPoint.position - transform.position;
-        if (RalleyPoint.position.y < 0.0f)
-            RalleyPoint.position = new Vector3(RalleyPoint.position.x,
-                                               0.0f,
-                                               RalleyPoint.position.z);
         //ProgressBar = new Image[2];
         ProgressBar[0] = ProgressBar[0].GetComponent<Image>();
         ProgressBar[1] = ProgressBar[1].GetComponent<Image>();
         DisableProgessBar();
+        myRalleyPoint = RalleyGameObject.GetComponent<RalleyPoint>();
+        myRalleyPoint.Init(gameObject);
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -61,7 +65,7 @@ public class HomeBase : Structure
     public void ProduceWorker()
     {
         GameObject g = Instantiate(WorkerPrefab, SpawnPoint.position, Quaternion.identity) as GameObject;
-        g.GetComponent<Worker>().OnSpawn(RalleyPoint.position);
+        g.GetComponent<Worker>().OnSpawn(myRalleyPoint.transform.position);
     }
 
     public override void ClosetestResorucePatches()

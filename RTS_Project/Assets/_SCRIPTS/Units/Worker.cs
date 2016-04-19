@@ -25,6 +25,7 @@ public class Worker : Unit
     // Use this for initialization
     void Start()
     {
+
     }
 
     public override void OnSpawn(Vector3 _HeadingTo)
@@ -38,6 +39,7 @@ public class Worker : Unit
         SetMoveTo(_HeadingTo);
         if (PlayerHUD == null)
             PlayerHUD = GameObject.Find("PlayerUI").GetComponent<PlayerUI>();
+        myAgent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame

@@ -93,4 +93,29 @@ public class PlayerUI : MonoBehaviour
             // myProduceUnit();
         }
     }
+
+    public void SetRalleyPoint()
+    {
+        GameObject clickedOn = pInput.GetLastClicked();
+        if(clickedOn)
+        {
+            Structure s = clickedOn.GetComponent<Structure>();
+            if(s != null)
+            {
+                switch (s.myStructType)
+                {
+                    case Structure.STRUCT_TYPE.HOMEBASE:
+                    case Structure.STRUCT_TYPE.RAX:
+                    case Structure.STRUCT_TYPE.FACTORY:
+                    case Structure.STRUCT_TYPE.STARPORT:
+                        pInput.ChangeKeyboardState(PlayerInput.KEYBOARD_STATE.RALLEY, 
+                            s.gameObject);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
 }

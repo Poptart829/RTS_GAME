@@ -26,13 +26,14 @@ public class Unit : BaseObject
     private BEHAVIOR_TYPE myBehavior;
     public void SetBehavior(BEHAVIOR_TYPE _BT) { myBehavior = _BT; }
     public BEHAVIOR_TYPE GetCurrentBehavior() { return myBehavior; }
-
+    protected NavMeshAgent myAgent;
     
 	// Use this for initialization
 	void Start ()
     {
         myUnitType = UNIT_TYPE.DEFAULT;
         isMoveable = true;
+        myAgent = GetComponent<NavMeshAgent>();
 	}
 	
 	// Update is called once per frame
@@ -54,6 +55,7 @@ public class Unit : BaseObject
         }
         else
             transform.LookAt(_moveTo);
+        myAgent.SetDestination(GetMoveToPos());
     }
 
     public virtual void MakeDecision(RaycastHit _hit)

@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 public class Structure : BaseObject
 {
-    public Transform RalleyPoint;
+    public GameObject RalleyGameObject;
+    protected RalleyPoint myRalleyPoint;
+    public RalleyPoint GetMyRalleyPoint() { return myRalleyPoint; }
     public Transform SpawnPoint;
     protected bool isBuilding;
     protected float BuildTime;
@@ -30,11 +32,12 @@ public class Structure : BaseObject
     {
         myType = OBJECT_TYPE.STRUCUTRE;
         myStructType = STRUCT_TYPE.DEFAULT;
-        RalleyPoint.position = Vector3.zero;
         ProgressBar = new Image[2];
         ProgressBar[0] = ProgressBar[0].GetComponent<Image>();
         ProgressBar[1] = ProgressBar[1].GetComponent<Image>();
         DisableProgessBar();
+        //myRalleyPoint = RalleyGameObject.GetComponent<RalleyPoint>();
+        //myRalleyPoint.Init(gameObject);
 	}
 	public void DisableProgessBar()
     {

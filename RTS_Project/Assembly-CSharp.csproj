@@ -56,6 +56,7 @@
      <Compile Include="Assets\_SCRIPTS\Resource\Mineral.cs" />
      <Compile Include="Assets\_SCRIPTS\Resource\Resource.cs" />
      <Compile Include="Assets\_SCRIPTS\Structure\HomeBase.cs" />
+     <Compile Include="Assets\_SCRIPTS\Structure\RalleyPoint.cs" />
      <Compile Include="Assets\_SCRIPTS\Structure\Structure.cs" />
      <Compile Include="Assets\_SCRIPTS\Units\Unit.cs" />
      <Compile Include="Assets\_SCRIPTS\Units\Worker.cs" />
@@ -63,6 +64,7 @@
      <Compile Include="Assets\_SCRIPTS\_PLAYER\PlayerUI.cs" />
      <None Include="Assets\_SHADERS\ClickMe.shader" />
      <None Include="Assets\_SHADERS\EdgeDetectionShader.shader" />
+     <None Include="Assets\_SHADERS\GlassReflective.shader" />
      <None Include="Assets\_SHADERS\OnClickHighlight.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

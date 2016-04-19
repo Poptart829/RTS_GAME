@@ -8,11 +8,18 @@ public class PlayerInput : MonoBehaviour
     private GameObject OBJ_Clicked;
     private GameObject LastObjClicked;
     public GameObject GetLastClicked() { return LastObjClicked; }
+    private GameObject RalleyTransform;
+
     public enum KEYBOARD_STATE
     {
-        NORMAL, ATTACK, PATROL
+        NORMAL, ATTACK, PATROL, RALLEY
     };
-
+    private KEYBOARD_STATE myKeyboardState;
+    public void ChangeKeyboardState(KEYBOARD_STATE _s, GameObject _g = null)
+    {
+        myKeyboardState = _s;
+        RalleyTransform = _g;
+    }
     public GameObject GetCurrentClickedObject() { return OBJ_Clicked; }
     // Use this for initialization
     void Start()
@@ -23,15 +30,33 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(ray.origin, ray.direction*50000000, Color.black);
-        if (Input.GetButtonDown("Left Click"))
+        if (myKeyboardState == KEYBOARD_STATE.RALLEY)
         {
-            OnLeftClick();
+            RalleyPoint r = RalleyTransform.GetComponent<Structure>().GetMyRalleyPoint();
+            if (r == null)
+                Debug.Log("problem");
+            r.TurnOnRalleyIcon();
+            r.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (Input.GetButtonDown("Left Click"))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    Vector3 spot = new Vector3(hit.transform.position.x, 0, hit.transform.position.z);
+                    RalleyTransform.transform.position = spot;
+                    myKeyboardState = KEYBOARD_STATE.NORMAL;
+                    RalleyTransform = null;
+                    return;
+                }
+            }
         }
-        if (Input.GetButtonDown("Right Click"))
+        else
         {
-            OnRightClick();
+            if (Input.GetButtonDown("Left Click"))
+                OnLeftClick();
+            if (Input.GetButtonDown("Right Click"))
+                OnRightClick();
         }
     }
 

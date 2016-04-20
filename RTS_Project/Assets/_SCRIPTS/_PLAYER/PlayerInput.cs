@@ -8,7 +8,7 @@ public class PlayerInput : MonoBehaviour
     private GameObject OBJ_Clicked;
     private GameObject LastObjClicked;
     public GameObject GetLastClicked() { return LastObjClicked; }
-    private GameObject RalleyTransform;
+    private GameObject RalleyPointGO;
 
     public enum KEYBOARD_STATE
     {
@@ -18,7 +18,7 @@ public class PlayerInput : MonoBehaviour
     public void ChangeKeyboardState(KEYBOARD_STATE _s, GameObject _g = null)
     {
         myKeyboardState = _s;
-        RalleyTransform = _g;
+        RalleyPointGO = _g;
     }
     public GameObject GetCurrentClickedObject() { return OBJ_Clicked; }
     // Use this for initialization
@@ -32,21 +32,19 @@ public class PlayerInput : MonoBehaviour
     {
         if (myKeyboardState == KEYBOARD_STATE.RALLEY)
         {
-            RalleyPoint r = RalleyTransform.GetComponent<Structure>().GetMyRalleyPoint();
-            if (r == null)
-                Debug.Log("problem");
-            r.TurnOnRalleyIcon();
-            r.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RalleyPoint r = RalleyPointGO.GetComponent<Structure>().GetMyRalleyPoint();
+            r.EnableHelpfulInfo();
             if (Input.GetButtonDown("Left Click"))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                //r.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Vector3 spot = new Vector3(hit.transform.position.x, 0, hit.transform.position.z);
-                    RalleyTransform.transform.position = spot;
+                    r.transform.position = hit.point;
                     myKeyboardState = KEYBOARD_STATE.NORMAL;
-                    RalleyTransform = null;
+                    RalleyPointGO = null;
+                    r.DisableHelpfulInfo();
                     return;
                 }
             }
@@ -76,6 +74,8 @@ public class PlayerInput : MonoBehaviour
             {
                 r = LastObjClicked.GetComponentInChildren<Renderer>();
                 r.material.shader = Shader.Find("Standard");
+                if (LastObjClicked.GetComponent<Structure>() != null)
+                    LastObjClicked.GetComponent<Structure>().GetMyRalleyPoint().DisableHelpfulInfo();
             }
             if (obj.GetHighlightable())
             {
@@ -99,6 +99,7 @@ public class PlayerInput : MonoBehaviour
                     case BaseObject.OBJECT_TYPE.BASE_TYPE:
                         break;
                     case BaseObject.OBJECT_TYPE.STRUCUTRE:
+                        obj.GetComponent<Structure>().OnClick(hit);
                         break;
                     case BaseObject.OBJECT_TYPE.UNIT:
                         break;

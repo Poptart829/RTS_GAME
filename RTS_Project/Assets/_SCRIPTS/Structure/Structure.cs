@@ -61,4 +61,9 @@ public class Structure : BaseObject
     {
 
     }
+
+    public override void OnClick(RaycastHit _objClickedOn, bool _isAgressive = false)
+    {
+        myRalleyPoint.EnableHelpfulInfo();
+    }
 }

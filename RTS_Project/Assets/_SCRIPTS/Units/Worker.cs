@@ -5,8 +5,8 @@ public class Worker : Unit
 {
     public Transform MineralAttachSpot;
     private GameObject attachedPrefab;
-    private GameObject targetBase;
-    public GameObject GetTargetBase() { return targetBase; }
+    private Transform targetBase;
+    public Transform GetTargetBase() { return targetBase; }
     private GameObject targetResource;
     public void SetTargetResource(GameObject _target)
     {
@@ -36,6 +36,7 @@ public class Worker : Unit
         FindClosetBase();
         FindClosestMineralPatch();
         MineralAttachSpot = MineralAttachSpot.GetComponent<Transform>();
+        targetBase = targetBase.GetComponent<Transform>();
         SetMoveTo(_HeadingTo);
         if (PlayerHUD == null)
             PlayerHUD = GameObject.Find("PlayerUI").GetComponent<PlayerUI>();
@@ -91,7 +92,7 @@ public class Worker : Unit
             foreach (GameObject b in HomeBase)
             {
                 if ((transform.position - b.transform.position).magnitude < distance)
-                    targetBase = b;
+                    targetBase = b.transform;
             }
         }
     }

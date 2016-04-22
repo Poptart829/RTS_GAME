@@ -8,6 +8,12 @@ public class PlayerUI : MonoBehaviour
     public Text MineralCountDisplay;
     //total number of minerals mined by the player
     private int TotalMinerals = 0;
+    public int GetTotalMinerals() { return TotalMinerals; }
+    public void SetTotalMineals(int _amount)
+    {
+        TotalMinerals = _amount;
+        MineralCountDisplay.text = _amount.ToString();
+    }
     // Use this for initialization
     public Image UnitPicture;
     public Image[] Icons;
@@ -17,7 +23,6 @@ public class PlayerUI : MonoBehaviour
 
     public delegate void ProduceUnitDelegate();
     public ProduceUnitDelegate myProduceUnit;
-
     void Start()
     {
         for (int x = 0; x < Icons.Length; x++)

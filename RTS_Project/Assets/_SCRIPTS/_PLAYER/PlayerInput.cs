@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerInput : MonoBehaviour
 {
     public Shader OnClickShader;
-    private bool IsAgressive = false;
     private GameObject OBJ_Clicked;
     private GameObject LastObjClicked;
     public GameObject GetLastClicked() { return LastObjClicked; }
@@ -21,15 +20,25 @@ public class PlayerInput : MonoBehaviour
         RalleyPointGO = _g;
     }
     public GameObject GetCurrentClickedObject() { return OBJ_Clicked; }
+    private PlayerStore myPlayerStore;
     // Use this for initialization
     void Start()
     {
-
+        myPlayerStore = GameObject.Find("PlayerStore").GetComponent<PlayerStore>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.F1))
+        {
+            myPlayerStore.DEBUGAddMoney(100);
+        }
+        if(Input.GetKey(KeyCode.F2))
+        {
+            myPlayerStore.DEBUGSubtractMoney(100);
+        }
+
         if (myKeyboardState == KEYBOARD_STATE.RALLEY)
         {
             RalleyPoint r = RalleyPointGO.GetComponent<Structure>().GetMyRalleyPoint();

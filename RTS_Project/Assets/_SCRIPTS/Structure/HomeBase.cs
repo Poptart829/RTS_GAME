@@ -24,7 +24,7 @@ public class HomeBase : Structure
         ClosetestResorucePatches();
         Vector3 pos = new Vector3(transform.position.x,
                                   0.0f,
-                                  transform.position.z * 4);
+                                  transform.position.z * 7);
         RalleyGameObject = Instantiate(RalleyGameObject,pos,Quaternion.identity) as GameObject;
     }
     

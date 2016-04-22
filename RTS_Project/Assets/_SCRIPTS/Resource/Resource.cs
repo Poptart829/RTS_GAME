@@ -12,7 +12,7 @@ public class Resource : BaseObject
         public GameObject Miner;
         public float time;
     };
-    public float MiningRate = 0.5f;
+    public float MiningRate = 1.0f;
     public MinerStruct[] CurrentMiners;
     public RESOURCE_TYPE myRType;
     public int NumMiners = 0;

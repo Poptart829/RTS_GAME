@@ -37,7 +37,7 @@ public class Mineral : Resource
                     //attach prefab to worker
                     scrub.AttachPrefab(MineralPrefab);
                     //start moving the working to ho home
-                    scrub.Move(scrub.GetTargetBase().transform.position);
+                    scrub.Move(scrub.GetTargetBase().position);
                     //reset the current miner at 'x' to allow more miners at this patch
                     ResetMiner(x);
                 }

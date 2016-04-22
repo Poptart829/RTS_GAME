@@ -34,6 +34,8 @@ public class Unit : BaseObject
         myUnitType = UNIT_TYPE.DEFAULT;
         isMoveable = true;
         myAgent = GetComponent<NavMeshAgent>();
+        if (myAgent == null)
+            Debug.Log("nul");
 	}
 	
 	// Update is called once per frame
@@ -45,17 +47,13 @@ public class Unit : BaseObject
     public virtual void Move(Vector3 _moveTo)
     {
         SetMoveTo(_moveTo);
-        Vector3 direction = GetMoveToPos() - transform.position;
-        direction = direction.normalized * moveSpeed;
-        myRigidBody.velocity = direction;
-        float d = (GetMoveToPos() - transform.position).magnitude;
+        myRigidBody.velocity = (_moveTo - transform.position).normalized * moveSpeed;
+        float d = (_moveTo - transform.position).magnitude;
         if (d < 1.6f)
-        {
             myRigidBody.velocity = Vector3.zero;
-        }
         else
             transform.LookAt(_moveTo);
-        myAgent.SetDestination(GetMoveToPos());
+        myAgent.SetDestination(_moveTo);
     }
 
     public virtual void MakeDecision(RaycastHit _hit)
